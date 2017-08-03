@@ -131,9 +131,10 @@ $(function() {
             jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
 
             for (var i = 0; i < allFeeds.length; i++){
+
+                loadFeed(i);
                 oldFeed = $('.feed').html();
                 oldTitle = $('.header-title');
-                loadFeed(i);
                 for (var j = 0; j < allFeeds.length; j++){
                     if (oldTitle[0].innerHTML != allFeeds[j].name){
                         loadFeed(j,done)
