@@ -34,7 +34,8 @@ $(function() {
         it('have URL in each elements',function(){
             for (var i = 0; i < allFeeds.length; i++){
                 var url = allFeeds[i].url;
-                expect(url).toBeDefined()
+                expect(url).toBeDefined();
+                expect(url.length).not.toBe(0)
             }
         });
 
@@ -45,6 +46,7 @@ $(function() {
         it('all names are defined',function(){
             for (var i = 0; i < allFeeds.length; i++){
                 var name = allFeeds[i].name;
+                expect(name).toBeDefined();
                 expect(name.length).not.toBe(0)
             }
         })
@@ -74,17 +76,19 @@ $(function() {
          */
         var menuIcon = $('.menu-icon-link'),
             name;
-        beforeEach(function(){
+        /*beforeEach(function(){
             if (judgeClass(body,'menu-hidden')){
                 name = 'menu-hidden'
             }
             else if (judgeClass(body,'')){
                 name = 'display'
             }
-        });
+        });*/
         it('the menu will display if it is hidden before clicked and disappear if it is displayed before clicked',function(){
             menuIcon.click();
-            expect(judgeClass(body,name)).toBe(false);
+            expect(judgeClass(body,'menu-hidden')).toBe(false);
+            menuIcon.click();
+            expect(judgeClass(body,'')).toBe(false);
         })
     });
 
@@ -101,15 +105,12 @@ $(function() {
         beforeEach(function(done){
             originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
             jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
-            loadFeed(0,function(){
-                done()
-            });
+            loadFeed(0,done);
 
         });
-        it('should have at least 1 .entry element within the .feed container',function(done){
+        it('should have at least 1 .entry element within the .feed container',function(){
             entries = $('.feed .entry');
             expect(entries.length).toBeGreaterThan(0);
-            done()
         });
         afterEach(function(){
             jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout
@@ -130,7 +131,7 @@ $(function() {
             originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
             jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
 
-            for (var i = 0; i < allFeeds.length; i++){
+            /*for (var i = 0; i < allFeeds.length; i++){
 
                 loadFeed(i);
                 oldFeed = $('.feed').html();
@@ -141,7 +142,10 @@ $(function() {
                     }
                 }
 
-            }
+            }*/
+            loadFeed(0);
+            oldFeed = $('.feed').html();
+            loadFeed(1,done)
         });
         it('should display a different feed when load a new feed',function(done){
             newFeed = $('.feed').html();
