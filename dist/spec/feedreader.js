@@ -31,11 +31,16 @@ $(function() {
          * in the allFeeds object and ensures it has a URL defined
          * and that the URL is not empty.
          */
-        it('have URL in each elements',function(){
+        function defineDectection(el){
+            expect(el).toBeDefined;
+            expect(el.length).not.toBe(0)
+        }
+        it('have URL in each elements and all URLs are defined',function(){
             for (var i = 0; i < allFeeds.length; i++){
-                var url = allFeeds[i].url;
-                expect(url).toBeDefined();
-                expect(url.length).not.toBe(0)
+                var url = allFeeds[i].url,
+                    regularExpressionUrl = /^((ht|f)tps?):\/\/([\w\-]+(\.[\w\-]+)*\/)*[\w\-]+(\.[\w\-]+)*\/?(\?([\w\-\.,@?^=%&:\/~\+#]*)+)?/;
+                defineDectection(url);
+                expect(url).toMatch(regularExpressionUrl)
             }
         });
 
@@ -43,11 +48,10 @@ $(function() {
          * in the allFeeds object and ensures it has a name defined
          * and that the name is not empty.
          */
-        it('all names are defined',function(){
+        it('all names are defined and they are not empty',function(){
             for (var i = 0; i < allFeeds.length; i++){
                 var name = allFeeds[i].name;
-                expect(name).toBeDefined();
-                expect(name.length).not.toBe(0)
+                defineDectection(name);
             }
         })
     });
@@ -143,14 +147,18 @@ $(function() {
                 }
 
             }*/
-            loadFeed(0);
-            oldFeed = $('.feed').html();
-            loadFeed(1,done)
+            loadFeed(0,function(){
+                oldFeed = $('.feed').html();
+                console.log('oldFeed has been loaded:' + oldFeed);
+                loadFeed(1,function(){
+                    newFeed = $('.feed').html();
+                    console.log('newFeed has been loaded:' + newFeed);
+                    done()
+                })
+            });
         });
-        it('should display a different feed when load a new feed',function(done){
-            newFeed = $('.feed').html();
+        it('should display a different feed when load a new feed',function(){
             expect(newFeed).not.toEqual(oldFeed);
-            done()
         });
         afterEach(function(){
             jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout
